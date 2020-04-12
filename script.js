@@ -1,0 +1,107 @@
+function getHistory()
+{
+  return document.getElementById("history-value").innerText;
+}
+//alert(getHistory());
+//print history-value
+//read the history-value using document.getElementId in innerText and value is assigned equal to num;
+function printHistoryValue(num)
+{
+   document.getElementById("history-value").innerText = num;  
+}
+function getOutput()
+{
+  return document.getElementById("output-value").innerText;
+}
+function printOutputValue(num)
+{
+  if(num=="")
+  {
+   document.getElementById("output-value").innerText= num;
+  }
+  else{
+    document.getElementById("output-value").innerText = getFormatedNumber(num);
+  }
+   
+}
+function getFormatedNumber(num)
+{
+  if(num=="-")
+  {
+    return "";
+  }
+  var n = Number(num);
+  var value = n.toLocaleString("en");  //number formate string
+  return value;
+}
+function reverseNumberFormat(num)
+{
+  return Number(num.replace(/,/g,''));
+}
+
+var operator = document.getElementsByClassName("operator");
+for(var i = 0;i<operator.length;i++)
+{
+  operator[i].addEventListener('click',function(){
+    if(this.id=="clear")
+    {
+      printHistoryValue("");
+      printOutputValue("");
+    }
+  else if(this.id=="backspace")
+  {
+    var output = reverseNumberFormat(getOutput()).toString();
+    if(output)
+    {
+      output = output.substr(0,output.length-1);
+      printOutputValue(output);
+    }
+  }
+  else {
+    
+    var output = getOutput();
+    var history = getHistory();
+    if(output=="" && history!="")
+    {
+      if(isNaN(history[history.length-1]))
+      {
+        history = history.substr(0,history.length-1);
+      }
+    }
+    if(output!="" || history!="")
+    {
+      output = output==""?
+      output: reverseNumberFormat(getOutput());
+      history = history + output;
+      if(this.id=="=")
+      {
+        var result = eval(history);
+        printOutputValue(result);
+        printHistoryValue("")
+      }
+      else{
+        history+=this.id;
+        printHistoryValue(history);
+        printOutputValue("");
+      }
+    }
+  }
+  });
+}
+
+var number = document.getElementsByClassName("number");
+for(var i = 0;i<number.length;i++)
+{
+  number[i].addEventListener('click',function(){
+    var output = reverseNumberFormat(getOutput());
+
+    if(output!=NaN)
+    {
+     output+=this.id;
+     printOutputValue(output);
+    }
+  });
+}
+
+
+
